@@ -3,10 +3,7 @@ import { createDefinitions } from './util'
 
 type OutputTab = 'plc' | 'property' | 'inline' | 'init' | 'enum'
 
-const sampleInput = `Motor_Start:bool:Motor start:Motor_Start:1
-Motor_Speed:int:Motor speed:Motor_Speed:1
-Tank_Level:real:Tank level:Tank_Level:1
-Alarm_Active:bool:Alarm active:Alarm_Active:1`
+const sampleInput = ``;
 
 const tabs: { id: OutputTab; label: string; hint: string }[] = [
   { id: 'plc', label: 'PLC', hint: 'PLC değişken tanımları' },
