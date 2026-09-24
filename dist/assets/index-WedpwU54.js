@@ -1,0 +1,59 @@
+(function(){let e=document.createElement(`link`).relList;if(e&&e.supports&&e.supports(`modulepreload`))return;for(let e of document.querySelectorAll(`link[rel="modulepreload"]`))n(e);new MutationObserver(e=>{for(let t of e)if(t.type===`childList`)for(let e of t.addedNodes)e.tagName===`LINK`&&e.rel===`modulepreload`&&n(e)}).observe(document,{childList:!0,subtree:!0});function t(e){let t={};return e.integrity&&(t.integrity=e.integrity),e.referrerPolicy&&(t.referrerPolicy=e.referrerPolicy),t.credentials=e.crossOrigin===`use-credentials`?`include`:e.crossOrigin===`anonymous`?`omit`:`same-origin`,t}function n(e){if(e.ep)return;e.ep=!0;let n=t(e);fetch(e.href,n)}})();function e(e){let t={İ:`I`,ı:`i`,ü:`u`,Ü:`U`,ö:`o`,Ö:`O`,ç:`c`,Ç:`C`,ğ:`g`,Ğ:`G`,Ş:`S`,ş:`s`};return e.replace(/[İıüÜöÖçÇğĞŞş]/g,e=>t[e]||e)}function t(t){if(!t)return null;let[n,r,i,a,o]=t.split(`:`);if(!n||!r)return console.warn(`Invalid template format: ${t}`),null;let s=o===`1`;return a=a&&a.length>0?a:n,r=e(r).toLowerCase().trim(),a=e(a),{ad:n,tip:r,etiketler:i,plcAdı:a,read:s,adres:``,register:-1,bitNumber:-1}}function n(e,n=0){let r=e.split(`
+`),i=n,a=0,o=!1,s=!1,c=[];return r.forEach(e=>{let n=t(e);n&&(n.tip==`bool`?(n.register=i,n.bitNumber=a,a++,s=!0,a>15?(o=!0,a=0,i++):o=!1):(s&&!o&&i++,s=!1,o=!1,a=0,n.register=i,i++,(n.tip==`real`||n.tip==`dint`)&&i++),c.push(n))}),c}function r(e){let t=`%MW${e.register}`;return e.tip==`dint`?t=`%MD${e.register}`:e.tip==`real`?t=`%MF${e.register}`:e.tip==`bool`&&(t=`%MW${e.register}:X${e.bitNumber}`),t}function i(e,t=0){let i=n(e,t),a=[],o=[],s=[],c=[],l=[{tip:`boolint`,arr:a},{tip:`realint`,arr:a},{tip:`int`,arr:a},{tip:`dint`,arr:o},{tip:`real`,arr:s},{tip:`bool`,arr:c}],u=[],d=[],f=[],p=[];return i.forEach(e=>{e.tip.includes(`realint`)?a.push(e):l.find(t=>t.tip==e.tip)?.arr.push(e);let t=`public IVariable ${e.ad} { get; set; }`,n=`VariableHelper.Define("${e.ad} AT${r(e)} : ${e.tip}", "${e.etiketler}", "${e.read?`true`:`false`}");`;u.push(t),d.push(`${t} = ${n}`),f.push(e.ad),p.push(`${e.ad} = ${n}`)}),{plc:`
+    <MemoryWords>
+        ${a.map((e,t,n)=>`<MemoryWord><Address>%MW${e.register}</Address><Index>${t}</Index><Symbol>${e.plcAdı}</Symbol></MemoryWord>`).join(`
+	`)}
+    </MemoryWords>
+    <MemoryDoubleWords>
+        ${o.map((e,t,n)=>`<MemoryDoubleWord><Address>%MD${e.register}</Address><Index>${t}</Index><Symbol>${e.plcAdı}</Symbol></MemoryDoubleWord>`).join(`
+	`)}
+    </MemoryDoubleWords>
+    <MemoryFloats>
+        ${s.map((e,t,n)=>`<MemoryFloat><Address>%MF${e.register}</Address><Index>${t}</Index><Symbol>${e.plcAdı}</Symbol></MemoryFloat>`).join(`
+	`)}
+    </MemoryFloats>
+    <CustomSymbols>
+        ${c.map((e,t,n)=>`<CustomSymbol><Address>%MW${e.register}:X${e.bitNumber}</Address><Index>${t}</Index><Symbol>${e.plcAdı}</Symbol></CustomSymbol>`).join(`
+	`)}
+    </CustomSymbols>
+    `,property:u.join(`
+`),inline:d.join(`
+`),enum:f.join(`,
+`),init:p.join(`
+`)}}var a=`Motor_Start:bool:Motor start:Motor_Start:1
+Motor_Speed:int:Motor speed:Motor_Speed:1
+Tank_Level:real:Tank level:Tank_Level:1
+Alarm_Active:bool:Alarm active:Alarm_Active:1`,o=[{id:`plc`,label:`PLC`,hint:`PLC değişken tanımları`},{id:`property`,label:`Property`,hint:`Property tanımları`},{id:`inline`,label:`Inline`,hint:`Inline eşlemeleri`},{id:`init`,label:`Init`,hint:`Başlangıç değerleri`},{id:`enum`,label:`Enum`,hint:`Enum karşılıkları`}],s={plc:`// PLC çıktısı burada görünecek`,property:`// Property çıktısı burada görünecek`,inline:`// Inline çıktısı burada görünecek`,init:`// Init çıktısı burada görünecek`,enum:`// Enum çıktısı burada görünecek`};document.querySelector(`#app`).innerHTML=`
+  <div class="shell">
+    <header class="topbar"><div class="brand"><span class="brand-mark">M</span><span>M221 <b>ADDR</b></span></div><div class="status"><span class="status-dot"></span> Generator online <span class="version">v0.1</span></div></header>
+    <main>
+      <section class="intro"><div class="eyebrow"><span></span> VARIABLE WORKBENCH</div><h1>PLC &amp; SCADA<br><em>değişken üretici</em></h1><p>Tanımlarınızı tek seferde girin, ihtiyacınız olan formatları anında oluşturun.</p></section>
+      <section class="workspace">
+        <div class="panel input-panel"><div class="panel-heading"><div><span class="step">01</span><div><h2>Girdi değişkenleri</h2><p>Her satıra bir değişken tanımlayın</p></div></div><span class="format-chip">NAME : TYPE</span></div><textarea id="input" spellcheck="false" aria-label="Girdi değişkenleri">${a}</textarea><div class="panel-footer"><span>Satır bazlı format</span><span id="input-count">4 değişken</span></div></div>
+        <div class="connector" aria-hidden="true"><span></span><i>↓</i><span></span></div>
+        <div class="panel output-panel"><div class="panel-heading output-heading"><div><span class="step">02</span><div><h2>Çıktılar</h2><p>İhtiyacınız olan formatı seçin</p></div></div><button id="generate" class="generate-button" type="button"><span>✦</span> Oluştur</button></div>
+          <div class="tabs" role="tablist" aria-label="Çıktı formatları">${o.map((e,t)=>`<button class="tab ${t===0?`active`:``}" id="tab-${e.id}" role="tab" aria-selected="${t===0}" aria-controls="output-${e.id}" data-tab="${e.id}">${e.label}<small>${e.hint}</small></button>`).join(``)}</div>
+          <div class="output-wrap">${o.map((e,t)=>`<textarea class="output ${t===0?`visible`:``}" id="output-${e.id}" data-output="${e.id}" role="tabpanel" aria-labelledby="tab-${e.id}" spellcheck="false" placeholder="${s[e.id]}" ${t===0?``:`hidden`}></textarea>`).join(``)}</div>
+          <div class="panel-footer"><span id="output-label">PLC çıktısı hazır</span><button id="copy" class="copy-button" type="button" title="Aktif çıktıyı kopyala">⧉ Kopyala</button></div>
+        </div>
+      </section>
+    </main>
+    <footer><span>ENGINEERING TOOLKIT</span><span>Designed for clean control systems</span></footer>
+  </div>`,document.querySelector(`#app`).innerHTML=`
+  <div class="shell">
+    <header class="topbar"><div class="brand"><span class="brand-mark">M</span><span>M221 <b>Adresle</b></span></div><div class="status"><span class="version">v1.0</span></div></header>
+    <main>
+      <section class="workspace">
+        <div class="panel input-panel"><div class="panel-heading"><div><span class="step">01</span><div><h2>Girdi değişkenleri</h2><p>Her satıra bir değişken tanımlayın</p></div></div><span class="format-chip">AD : TİP : ETİKETLER : PLC ADI : OKU</span></div><textarea id="input" spellcheck="false" aria-label="Girdi değişkenleri">${a}</textarea><div class="panel-footer"><span>Satır bazlı format</span><span id="input-count">4 değişken</span></div></div>
+        <div class="connector" aria-hidden="true"><span></span><i>↓</i><span></span></div>
+        <div class="panel output-panel"><div class="panel-heading output-heading"><div><span class="step">02</span><div><h2>Çıktılar</h2><p>İhtiyacınız olan formatı seçin</p></div></div><button id="generate" class="generate-button" type="button"><span>✦</span> Oluştur</button></div>
+          <div class="tabs" role="tablist" aria-label="Çıktı formatları">${o.map((e,t)=>`<button class="tab ${t===0?`active`:``}" id="tab-${e.id}" role="tab" aria-selected="${t===0}" aria-controls="output-${e.id}" data-tab="${e.id}">${e.label}<small>${e.hint}</small></button>`).join(``)}</div>
+          <div class="output-wrap">${o.map((e,t)=>`<textarea class="output ${t===0?`visible`:``}" id="output-${e.id}" data-output="${e.id}" role="tabpanel" aria-labelledby="tab-${e.id}" spellcheck="false" placeholder="${s[e.id]}" ${t===0?``:`hidden`}></textarea>`).join(``)}</div>
+          <div class="panel-footer"><span id="output-label">PLC çıktısı hazır</span><button id="copy" class="copy-button" type="button" title="Aktif çıktıyı kopyala">⧉ Kopyala</button></div>
+        </div>
+      </section>
+    </main>
+   
+  </div>`;var c=document.querySelector(`#input`),l=document.querySelector(`#generate`),u=document.querySelector(`#copy`),d=`plc`;function f(){let e=i(c.value);o.forEach(({id:t})=>{document.querySelector(`#output-${t}`).value=e[t]});let t=c.value.split(`
+`).filter(e=>e.trim()).length;document.querySelector(`#output-label`).textContent=`${t} değişken oluşturuldu`}c.addEventListener(`input`,()=>{document.querySelector(`#input-count`).textContent=`${c.value.split(`
+`).filter(e=>e.trim()).length} değişken`}),l.addEventListener(`click`,f),document.querySelectorAll(`.tab`).forEach(e=>e.addEventListener(`click`,()=>{d=e.dataset.tab,document.querySelectorAll(`.tab`).forEach(e=>{e.classList.remove(`active`),e.setAttribute(`aria-selected`,`false`)}),document.querySelectorAll(`.output`).forEach(e=>{e.classList.remove(`visible`),e.hidden=!0}),e.classList.add(`active`),e.setAttribute(`aria-selected`,`true`);let t=document.querySelector(`#output-${d}`);t.hidden=!1,t.classList.add(`visible`),document.querySelector(`#output-label`).textContent=`${o.find(({id:e})=>e===d)?.label} çıktısı hazır`})),u.addEventListener(`click`,async()=>{let e=document.querySelector(`#output-${d}`);e.value||f(),await navigator.clipboard?.writeText(e.value),u.textContent=`✓ Kopyalandı`,setTimeout(()=>{u.textContent=`⧉ Kopyala`},1600)}),f();
