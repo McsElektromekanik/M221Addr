@@ -120,6 +120,7 @@ export function createDefinitions(txt: string, addr: number = 0): {
         { tip: "bool", arr: customSymbols },
     ];
 
+    const plcDefinitions: string[] = [];
     const scadaDefinitions: string[] = [];
     const scadaInlineDefinitions: string[] = [];
     const scadaEnumDefinitions: string[] = [];
@@ -130,25 +131,32 @@ export function createDefinitions(txt: string, addr: number = 0): {
 
         const scadaDef = `public IVariable ${variable.ad} { get; set; }`;
         const inst = `VariableHelper.Define("${variable.ad} AT${getATString(variable)} : ${variable.tip}", "${variable.etiketler}", "${variable.read ? "true" : "false"}");`;
+        
+        plcDefinitions.push(`${variable.plcAdı};${getATString(variable)};`);
         scadaDefinitions.push(scadaDef);
         scadaInlineDefinitions.push(`${scadaDef} = ${inst}`);
         scadaEnumDefinitions.push(variable.ad);
         scadaInstantiations.push(`${variable.ad} = ${inst}`);
     });
 
-    const plcDefinition = `
-    <MemoryWords>
-        ${memoryWords.map((x, index, _arr) => `<MemoryWord><Address>%MW${x.register}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></MemoryWord>`).join("\n\t")}
-    </MemoryWords>
-    <MemoryDoubleWords>
-        ${memoryDoubleWords.map((x, index, _arr) => `<MemoryDoubleWord><Address>%MD${x.register}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></MemoryDoubleWord>`).join("\n\t")}
-    </MemoryDoubleWords>
-    <MemoryFloats>
-        ${memoryFloats.map((x, index, _arr) => `<MemoryFloat><Address>%MF${x.register}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></MemoryFloat>`).join("\n\t")}
-    </MemoryFloats>
-    <CustomSymbols>
-        ${customSymbols.map((x, index, _arr) => `<CustomSymbol><Address>%MW${x.register}:X${x.bitNumber}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></CustomSymbol>`).join("\n\t")}
-    </CustomSymbols>
+    // const plcDefinition = `
+    // <MemoryWords>
+    //     ${memoryWords.map((x, index, _arr) => `<MemoryWord><Address>%MW${x.register}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></MemoryWord>`).join("\n\t")}
+    // </MemoryWords>
+    // <MemoryDoubleWords>
+    //     ${memoryDoubleWords.map((x, index, _arr) => `<MemoryDoubleWord><Address>%MD${x.register}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></MemoryDoubleWord>`).join("\n\t")}
+    // </MemoryDoubleWords>
+    // <MemoryFloats>
+    //     ${memoryFloats.map((x, index, _arr) => `<MemoryFloat><Address>%MF${x.register}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></MemoryFloat>`).join("\n\t")}
+    // </MemoryFloats>
+    // <CustomSymbols>
+    //     ${customSymbols.map((x, index, _arr) => `<CustomSymbol><Address>%MW${x.register}:X${x.bitNumber}</Address><Index>${index}</Index><Symbol>${x.plcAdı}</Symbol></CustomSymbol>`).join("\n\t")}
+    // </CustomSymbols>
+    // `;
+
+    const plcDefinition = 
+    `Sembol;Adres;Açıklama
+${plcDefinitions.join("\n")}
     `;
     return {
         plc: plcDefinition,
