@@ -44,6 +44,11 @@ h1 em { color: var(--coral); font-style: normal; }
 h2 { margin: 0 0 2px; font-size: 16px; letter-spacing: -.2px; }
 .panel-heading p { margin: 0; color: var(--muted); font-size: 12px; }
 .format-chip { color: var(--muted); font: 10px var(--mono); letter-spacing: .7px; }
+.address-row { display: flex; align-items: center; gap: 12px; padding: 12px 25px; border-top: 1px solid #edf1ef; border-bottom: 1px solid #edf1ef; background: #fbfcfa; }
+.address-row label { color: var(--navy); font: 700 11px var(--mono); text-transform: uppercase; letter-spacing: .35px; }
+.address-row input { width: 92px; padding: 8px 10px; border: 1px solid var(--line); border-radius: 4px; outline: none; color: var(--navy); background: white; font: 13px var(--mono); }
+.address-row input:focus { border-color: var(--teal); box-shadow: 0 0 0 3px rgba(20, 125, 117, .1); }
+.address-row span { color: var(--muted); font: 10px var(--mono); }
 textarea { display: block; width: 100%; resize: vertical; outline: none; }
 #input { min-height: 155px; padding: 18px 25px; border: 0; border-top: 1px solid #edf1ef; border-bottom: 1px solid #edf1ef; color: var(--navy); background: #fbfcfa; font: 14px/1.8 var(--mono); tab-size: 2; }
 #input:focus, .output:focus { background: #f7fbfa; }
@@ -77,6 +82,7 @@ footer { display: flex; justify-content: space-between; padding: 22px 0; border-
   .panel-heading { padding: 20px 18px 16px; }
   .panel-heading > div { gap: 10px; }
   .format-chip { display: none; }
+  .address-row { padding-left: 18px; padding-right: 18px; flex-wrap: wrap; }
   #input, .output { padding-left: 18px; padding-right: 18px; }
   .panel-footer { padding: 0 18px; }
   .tabs { padding: 0 14px; }
