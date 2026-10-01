@@ -167,6 +167,6 @@ ${plcDefinitions.join("\n")}
         inline: scadaInlineDefinitions.join("\n"),
         enum: scadaEnumDefinitions.join(",\n"),
         init: scadaInstantiations.join("\n"),
-        plcNames: plcNamesArr.join(",\n"),
+        plcNames: plcNamesArr.join("\n"),
     };
 }
