@@ -105,6 +105,7 @@ export function createDefinitions(txt: string, addr: number = 0): {
     inline: string;
     enum: string;
     init: string;
+    plcNames: string;
 } {
     const variables = getVars(txt, addr);
     const memoryWords: Variable[] = [];
@@ -125,6 +126,7 @@ export function createDefinitions(txt: string, addr: number = 0): {
     const scadaInlineDefinitions: string[] = [];
     const scadaEnumDefinitions: string[] = [];
     const scadaInstantiations: string[] = [];
+    const plcNamesArr: string[] = [];
     variables.forEach((variable) => {
         if (variable.tip.includes("realint")) memoryWords.push(variable);
         else tipArrPairs.find((x) => x.tip == variable.tip)?.arr.push(variable);
@@ -137,6 +139,7 @@ export function createDefinitions(txt: string, addr: number = 0): {
         scadaInlineDefinitions.push(`${scadaDef} = ${inst}`);
         scadaEnumDefinitions.push(variable.ad);
         scadaInstantiations.push(`${variable.ad} = ${inst}`);
+        plcNamesArr.push(variable.plcAdı);
     });
 
     // const plcDefinition = `
@@ -164,5 +167,6 @@ ${plcDefinitions.join("\n")}
         inline: scadaInlineDefinitions.join("\n"),
         enum: scadaEnumDefinitions.join(",\n"),
         init: scadaInstantiations.join("\n"),
+        plcNames: plcNamesArr.join(",\n"),
     };
 }

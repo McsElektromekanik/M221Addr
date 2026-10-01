@@ -6,7 +6,7 @@ ${s.join(`
 `),inline:l.join(`
 `),enum:u.join(`,
 `),init:d.join(`
-`)}}var a=``,o=[{id:`plc`,label:`PLC`,hint:`PLC değişken tanımları`},{id:`property`,label:`Property`,hint:`Property tanımları`},{id:`inline`,label:`Inline`,hint:`Inline eşlemeleri`},{id:`init`,label:`Init`,hint:`Başlangıç değerleri`},{id:`enum`,label:`Enum`,hint:`Enum karşılıkları`}],s={plc:`// PLC çıktısı burada görünecek`,property:`// Property çıktısı burada görünecek`,inline:`// Inline çıktısı burada görünecek`,init:`// Init çıktısı burada görünecek`,enum:`// Enum çıktısı burada görünecek`};document.querySelector(`#app`).innerHTML=`
+`)}}var a=``,o=[{id:`plc`,label:`PLC`,hint:`PLC değişken tanımları`},{id:`property`,label:`Property`,hint:`Property tanımları`},{id:`inline`,label:`Inline`,hint:`Inline eşlemeleri`},{id:`init`,label:`Init`,hint:`Başlangıç değerleri`},{id:`enum`,label:`Enum`,hint:`Enum karşılıkları`},{id:`plcNames`,label:`PLC Değişken Adları`,hint:`PLC değişken adları`}],s={plc:`// PLC çıktısı burada görünecek`,property:`// Property çıktısı burada görünecek`,inline:`// Inline çıktısı burada görünecek`,init:`// Init çıktısı burada görünecek`,enum:`// Enum çıktısı burada görünecek`,plcNames:`// PLC değişken adları çıktısı burada görünecek`};document.querySelector(`#app`).innerHTML=`
   <div class="shell">
     <header class="topbar"><div class="brand"><span class="brand-mark">M</span><span>M221 <b>Adresle</b></span></div><div class="status"><span class="version">v1.0</span></div></header>
     <main>
@@ -21,6 +21,6 @@ ${s.join(`
       </section>
     </main>
    
-  </div>`;var c=document.querySelector(`#input`),l=document.querySelector(`#start-address`),u=document.querySelector(`#generate`),d=document.querySelector(`#copy`),f=`plc`;function p(){let e=i(c.value,Number(l.value)||0);o.forEach(({id:t})=>{document.querySelector(`#output-${t}`).value=e[t]});let t=c.value.split(`
+  </div>`;var c=document.querySelector(`#input`),l=document.querySelector(`#start-address`),u=document.querySelector(`#generate`),d=document.querySelector(`#copy`),f=`plc`;function p(){let e=i(c.value,Number(l.value)||0);o.forEach(({id:t})=>{document.querySelector(`#output-${t}`).value=e[t]??``});let t=c.value.split(`
 `).filter(e=>e.trim()).length;document.querySelector(`#output-label`).textContent=`${t} değişken oluşturuldu`}c.addEventListener(`input`,()=>{document.querySelector(`#input-count`).textContent=`${c.value.split(`
 `).filter(e=>e.trim()).length} değişken`}),l.addEventListener(`input`,()=>{Number(l.value)<0&&(l.value=`0`)}),u.addEventListener(`click`,p),document.querySelectorAll(`.tab`).forEach(e=>e.addEventListener(`click`,()=>{f=e.dataset.tab,document.querySelectorAll(`.tab`).forEach(e=>{e.classList.remove(`active`),e.setAttribute(`aria-selected`,`false`)}),document.querySelectorAll(`.output`).forEach(e=>{e.classList.remove(`visible`),e.hidden=!0}),e.classList.add(`active`),e.setAttribute(`aria-selected`,`true`);let t=document.querySelector(`#output-${f}`);t.hidden=!1,t.classList.add(`visible`),document.querySelector(`#output-label`).textContent=`${o.find(({id:e})=>e===f)?.label} çıktısı hazır`})),d.addEventListener(`click`,async()=>{let e=document.querySelector(`#output-${f}`);e.value||p(),await navigator.clipboard?.writeText(e.value),d.textContent=`✓ Kopyalandı`,setTimeout(()=>{d.textContent=`⧉ Kopyala`},1600)}),p();

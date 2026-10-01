@@ -1,7 +1,7 @@
 import './style.css'
 import { createDefinitions } from './util'
 
-type OutputTab = 'plc' | 'property' | 'inline' | 'init' | 'enum'
+type OutputTab = 'plc' | 'property' | 'inline' | 'init' | 'enum' | 'plcNames'
 
 const sampleInput = ``;
 
@@ -11,16 +11,18 @@ const tabs: { id: OutputTab; label: string; hint: string }[] = [
   { id: 'inline', label: 'Inline', hint: 'Inline eşlemeleri' },
   { id: 'init', label: 'Init', hint: 'Başlangıç değerleri' },
   { id: 'enum', label: 'Enum', hint: 'Enum karşılıkları' },
+  { id: 'plcNames', label: 'PLC Değişken Adları', hint: 'PLC değişken adları' },
 ]
 
 const outputPlaceholders: Record<OutputTab, string> = {
   plc: '// PLC çıktısı burada görünecek', property: '// Property çıktısı burada görünecek',
   inline: '// Inline çıktısı burada görünecek', init: '// Init çıktısı burada görünecek', enum: '// Enum çıktısı burada görünecek',
+  plcNames: '// PLC değişken adları çıktısı burada görünecek',
 }
 
 document.querySelector<HTMLDivElement>('#app')!.innerHTML = `
   <div class="shell">
-    <header class="topbar"><div class="brand"><span class="brand-mark">M</span><span>M221 <b>Adresle</b></span></div><div class="status"><span class="version">v1.0</span></div></header>
+    <header class="topbar"><div class="brand"><span class="brand-mark">M</span><span>M221 <b>Adresle</b></span></div><div class="status"><span class="version">v1.1</span></div></header>
     <main>
       <section class="workspace">
         <div class="panel input-panel"><div class="panel-heading"><div><span class="step">01</span><div><h2>Girdi değişkenleri</h2><p>Her satıra bir değişken tanımlayın</p></div></div><span class="format-chip">AD : TİP : ETİKETLER : PLC ADI : OKU</span></div><div class="address-row"><label for="start-address">Başlangıç adresi</label><input id="start-address" type="number" min="0" step="1" value="0" aria-label="Başlangıç adresi"><span>Memory word</span></div><textarea id="input" spellcheck="false" aria-label="Girdi değişkenleri">${sampleInput}</textarea><div class="panel-footer"><span>Satır bazlı format</span><span id="input-count">0 değişken</span></div></div>
@@ -43,7 +45,7 @@ let activeTab: OutputTab = 'plc'
 
 function generateOutputs() {
   const definitions = createDefinitions(input.value, Number(startAddress.value) || 0)
-  tabs.forEach(({ id }) => { document.querySelector<HTMLTextAreaElement>(`#output-${id}`)!.value = definitions[id] })
+  tabs.forEach(({ id }) => { document.querySelector<HTMLTextAreaElement>(`#output-${id}`)!.value = definitions[id as keyof typeof definitions] ?? '' })
   const variableCount = input.value.split('\n').filter((line) => line.trim()).length
   document.querySelector('#output-label')!.textContent = `${variableCount} değişken oluşturuldu`
 }
