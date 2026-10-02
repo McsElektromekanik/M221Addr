@@ -132,7 +132,7 @@ export function createDefinitions(txt: string, addr: number = 0): {
         else tipArrPairs.find((x) => x.tip == variable.tip)?.arr.push(variable);
 
         const scadaDef = `public IVariable ${variable.ad} { get; set; }`;
-        const inst = `VariableHelper.Define("${variable.ad} AT${getATString(variable)} : ${variable.tip}", "${variable.etiketler}", "${variable.read ? "true" : "false"}");`;
+        const inst = `VariableHelper.Define("${variable.ad} AT${getATString(variable)} : ${variable.tip}", "${variable.etiketler}", ${variable.read ? "true" : "false"});`;
         
         plcDefinitions.push(`${variable.plcAdı};${getATString(variable)};`);
         scadaDefinitions.push(scadaDef);
